@@ -1,3 +1,4 @@
+import data from '../number.json';
 export default async function handler(req, res) {
   try {
     const phone = process.env.PHONE_NUMBER;
