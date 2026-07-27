@@ -1,13 +1,6 @@
-import data from '../number.json';
-
 export default function handler(req, res) {
-  try {
-    return res.status(200).json(data);
-  } catch (err) {
-    console.error(err);
-
-    return res.status(500).json({
-      error: err.message
-    });
-  }
+  res.status(200).json({
+    phone: "+639925281339",
+    sms_enabled: true
+  });
 }
