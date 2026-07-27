@@ -1,57 +1,47 @@
-export default async function handler(req, res) {
+    export default async function handler(req, res) {
 
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      success: false,
-      message: "POST only"
-    });
-  }
+    if (req.method !== "POST") {
+        return res.status(405).json({
+        success: false,
+        message: "POST only"
+        });
+    }
 
-  try {
+    try {
 
-    const body = req.body;
+        const body = req.body;
 
-    console.log("Received:", body);
+        console.log("Received:", body);
 
+        const response = await fetch(
+        "https://www.circuitdigest.cloud/api/v1/geolinker",
+        {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization":
+                "Bearer cd_bub_200726_pGeWmt"
+            },
+            body: JSON.stringify(body)
+        }
+        );
 
-    // Convert timestamp to Unix timestamp
-    body.timestamp = [
-      Math.floor(Date.now() / 1000)
-    ];
+        const text = await response.text();
 
+        return res.status(200).json({
+        success: true,
+        circuitdigest_status: response.status,
+        circuitdigest_response: text
+        });
 
-    const response = await fetch(
-      "https://www.circuitdigest.cloud/api/v1/geolinker",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization":
-            "Bearer cd_bub_200726_pGeWmt"
-        },
-        body: JSON.stringify(body)
-      }
-    );
+    } catch (error) {
 
+        console.error(error);
 
-    const text = await response.text();
+        return res.status(500).json({
+        success: false,
+        error: error.message
+        });
 
-
-    return res.status(response.status).json({
-      success: response.ok,
-      circuitdigest_status: response.status,
-      circuitdigest_response: text
-    });
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      error: error.message
-    });
-
-  }
-}
+    }
+    }
