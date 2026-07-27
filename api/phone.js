@@ -1,11 +1,10 @@
 import data from '../number.json';
-export default async function handler(req, res) {
-  try {
-    const phone = process.env.PHONE_NUMBER;
 
+export default function handler(req, res) {
+  try {
     return res.status(200).json({
-      phone,
-      sms_enabled: true
+      phone: data.phone,
+      sms_enabled: data.sms_enabled
     });
   } catch (err) {
     console.error(err);
