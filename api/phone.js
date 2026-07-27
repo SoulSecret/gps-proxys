@@ -2,10 +2,7 @@ import data from '../number.json';
 
 export default function handler(req, res) {
   try {
-    return res.status(200).json({
-      phone: data.phone,
-      sms_enabled: data.sms_enabled
-    });
+    return res.status(200).json(data);
   } catch (err) {
     console.error(err);
 
