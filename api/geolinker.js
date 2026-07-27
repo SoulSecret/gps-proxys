@@ -9,9 +9,8 @@ export default async function handler(req, res) {
 
   try {
 
-    const body = req.body;
-
-    console.log("Received:", body);
+    console.log("Incoming Data:");
+    console.log(req.body);
 
     const response = await fetch(
       "https://www.circuitdigest.cloud/api/v1/geolinker",
@@ -22,11 +21,14 @@ export default async function handler(req, res) {
           "Authorization":
             "Bearer cd_bub_200726_pGeWmt"
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(req.body)
       }
     );
 
     const text = await response.text();
+
+    console.log("CircuitDigest Response:");
+    console.log(text);
 
     return res.status(200).json({
       success: true,
@@ -34,13 +36,14 @@ export default async function handler(req, res) {
       circuitdigest_response: text
     });
 
-  } catch (error) {
+  }
+  catch (err) {
 
-    console.error(error);
+    console.error(err);
 
     return res.status(500).json({
       success: false,
-      error: error.message
+      error: err.message
     });
 
   }
