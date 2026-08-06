@@ -1,47 +1,36 @@
-    export default async function handler(req, res) {
+export default async function handler(req, res) {
 
-    if (req.method !== "POST") {
-        return res.status(405).json({
-        success: false,
-        message: "POST only"
-        });
-    }
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      success: false,
+      message: "POST only"
+    });
+  }
 
-    try {
+  try {
 
-        const body = req.body;
+    const response = await fetch(
+      "https://www.circuitdigest.cloud/api/v1/geolinker",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer cd_mar_110726_7vhUHh"
+        },
+        body: JSON.stringify(req.body)
+      }
+    );
 
-        console.log("Received:", body);
+    const text = await response.text();
 
-        const response = await fetch(
-        "https://www.circuitdigest.cloud/api/v1/geolinker",
-        {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            "Authorization":
-                "Bearer cd_mar_110726_7vhUHh"
-            },
-            body: JSON.stringify(body)
-        }
-        );
+    return res.status(response.status).send(text);
 
-        const text = await response.text();
+  } catch (error) {
 
-        return res.status(200).json({
-        success: true,
-        circuitdigest_status: response.status,
-        circuitdigest_response: text
-        });
+    return res.status(500).json({
+      success: false,
+      error: error.message
+    });
 
-    } catch (error) {
-
-        console.error(error);
-
-        return res.status(500).json({
-        success: false,
-        error: error.message
-        });
-
-    }
-    }
+  }
+}
